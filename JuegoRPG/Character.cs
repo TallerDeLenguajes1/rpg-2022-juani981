@@ -2,6 +2,7 @@
 
 public class Character
 {
+	//Constructor
 	public Character()
 	{
 		Random random = new Random();
