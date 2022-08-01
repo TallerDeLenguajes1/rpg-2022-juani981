@@ -6,7 +6,7 @@ using JuegoRPG;
 
 
 /*Creacion de una lista de personajes, una lista de caracteristicas, y una lista de atributos de combate
-Si bien son 3 listas distintas, el indice representa el acceso al mismo personaje
+Si bien son 4 listas distintas, el indice representa el acceso al mismo personaje
 Es decir, un personaje esta definido por un indice unico en 3 listas diferentes
 Se decidio esta implementacion por la facilidad de mantener el codigo*/
 List<Character> characters = new List<Character>();
@@ -144,6 +144,7 @@ static void MostrarPersonajesCreados(List<Character> characters, List<Caracteris
         Console.WriteLine("Poder de Defensa: " + combat[i].PDEF);
         Console.WriteLine("Maximo danio provocable: " + combat[i].MDP);
         Console.WriteLine("=========");
+        Console.WriteLine("\n");
     }
 }
 
@@ -304,11 +305,11 @@ static void Duelo(List<Character> characters, List<Caracteristicas> caracteristi
 static void ResoluciondelCombate(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, List<int> indices, int atacante, int contrincante, int indexcombates)
 {
     Duelo(characters, caracteristicas, combat, atacante, contrincante);
-    Console.Write("El Ganador del encuentro es:\t");
+    Console.Write("El Ganador del encuentro es:\t\t");
 
     if (caracteristicas[atacante].salud > caracteristicas[contrincante].salud)
     {
-        Console.Write("Jugador " + atacante + "\n");
+        Console.Write(caracteristicas[atacante].apodo + "\n");
         caracteristicas[atacante].salud += 10;//Se otorga 10 puntos de vida al ganador
         characters[atacante].armadura -= 1;//Pierde 1 punto de armadura
         characters[atacante].destreza += 2;//Se otorgan 2 puntos de destreza
@@ -316,7 +317,7 @@ static void ResoluciondelCombate(List<Character> characters, List<Caracteristica
     }
     else if (caracteristicas[atacante].salud < caracteristicas[contrincante].salud)
     {
-        Console.Write("Jugador " + contrincante + "\n");
+        Console.Write(caracteristicas[contrincante].apodo + "\n");
         caracteristicas[contrincante].salud += 10;//Se otorga 10 puntos de vida al ganador
         characters[contrincante].armadura -= 1;//Pierde 1 punto de armadura
         characters[contrincante].destreza += 2;//Se otorgan 2 puntos de destreza
@@ -328,15 +329,15 @@ static void ResoluciondelCombate(List<Character> characters, List<Caracteristica
         //Se resuelve el empate con el numero mas alto
         Random rnd1 = new Random();
         Random rnd2 = new Random();
-        Console.Write("El Ganador del encuentro es:\t");
+        Console.Write("El Ganador del encuentro es:\t\t");
         if (rnd2.Next() < rnd1.Next())
         {
             characters[atacante].ganador = true;
-            Console.Write("Jugador " + atacante + "\n");
+            Console.Write(caracteristicas[atacante].apodo + "\n");
         }
         else
             characters[contrincante].ganador = true;
-        Console.Write("Jugador " + contrincante + "\n");
+        Console.Write(caracteristicas[contrincante].apodo + "\n");
     }
 }
 
@@ -355,12 +356,11 @@ static List<int> ListaAuxGanadores(List<Character> characters, List<int> indices
     return listaGanadores;
 }
 
-
 static void EscribirCSV(List<Character> characters, List<Caracteristicas> caracteristicas, int i)
 {
-    StreamWriter sw = new StreamWriter(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\participantes.json", append: true);
+    StreamWriter sw = new StreamWriter(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\Ganadores.csv", append: true);
 
-    if (!File.Exists(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\participantes.json"))
+    if (!File.Exists(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\Ganadores.csv"))
     {
         sw.WriteLine("Nombre;Apodo;Nivel;Tipo");
     }
@@ -374,11 +374,11 @@ static void EscribirCSV(List<Character> characters, List<Caracteristicas> caract
 static void MostrarCSV()
 {
 
-    if (File.Exists(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\participantes.json"))
+    if (File.Exists(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\Ganadores.csv"))
     {
         Console.WriteLine("Nombre\t\tApodo\t\tNivel\t\tTipo\t\t");
         string line = "";
-        using (StreamReader sr = new StreamReader(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\participantes.json"))
+        using (StreamReader sr = new StreamReader(@"C:\Users\Juan Ignacio Carrizo\Documents\Logs\Ganadores.csv"))
         {
             while ((line = sr.ReadLine()) != null)
             {
@@ -475,14 +475,14 @@ static void RondaSiguiente(List<Character> characters, List<Caracteristicas> car
             if (caracteristicas[aux[0]].salud > caracteristicas[aux[1]].salud)
             {
                 Console.WriteLine("\n\n=El ganador del trono de hierro es: " + caracteristicas[aux[1]].apodo);
-                indexGanador = 0;
+                indexGanador = aux[0];
                 EscribirCSV(characters, caracteristicas, indexGanador);
             }
             else
             if (caracteristicas[aux[0]].salud < caracteristicas[aux[1]].salud)
             {
                 Console.WriteLine("\n\n=El ganador del trono de hierro es: " + caracteristicas[aux[1]].nombre);
-                indexGanador = 1;
+                indexGanador = aux[1];
                 EscribirCSV(characters, caracteristicas, indexGanador);
             }
 
