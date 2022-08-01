@@ -13,13 +13,13 @@ List<Combate> combat = new List<Combate>();
 
 //Creacion de personajes, agregandolos a la lista
 Console.WriteLine("Cuantos personajes va a crear?");
-int n=Convert.ToInt32(Console.ReadLine());
+int n = Convert.ToInt32(Console.ReadLine());
 for (int i = 0; i < n; i++)
 {
     //Se crea un elemnto de cada lista y se agrega a su respectiva lista
     Character personaje = new Character();
     Caracteristicas caracteristicasDelPersonaje = new Caracteristicas();
-    Combate atributosdepeleaDelPersonaje =new Combate(personaje);
+    Combate atributosdepeleaDelPersonaje = new Combate(personaje);
     characters.Add(personaje);
     caracteristicas.Add(caracteristicasDelPersonaje);
     combat.Add(atributosdepeleaDelPersonaje);
@@ -29,7 +29,7 @@ for (int i = 0; i < n; i++)
 for (int i = 0; i < characters.Count(); i++)
 {
     Console.WriteLine("Prueba de generacion de personajes:");
-    Console.WriteLine("Atributos aleatorios del personaje "+i+":");
+    Console.WriteLine("Atributos aleatorios del personaje " + i + ":");
     Console.WriteLine("Velocidad:" + characters[i].velocidad);
     Console.WriteLine("Destreza:" + characters[i].destreza);
     Console.WriteLine("Fuerza:" + characters[i].fuerza);
@@ -50,32 +50,25 @@ for (int i = 0; i < characters.Count(); i++)
 }
 
 //Programa de prueba de combate
-    //Defino dos indices aleatorios, para pelear entre si
-        //Se debe controlar que ambos valores no sean iguales, y no se repitan luego
+//Defino dos indices aleatorios, para pelear entre si
+//Se debe controlar que ambos valores no sean iguales, y no se repitan luego
 Random rnd = new Random();
 int peleador1, peleador2;
 List<int> indices = new List<int>();//Voy a llevar registro de los indices mediante una lista
-          //Generador de 2 indices aleatorios
-          //El par de indices debe generarse n/2 veces
-            for (int i = 0; i < n/2; i++)
-            {
-                do
-                {
-                    peleador1 = rnd.Next(0, n);
-                    peleador2 = rnd.Next(0, n); ;//n estaba definida antes como la cantidad de personajes a generar
-                } while (peleador1 == peleador2 || indices.Contains(peleador1) || indices.Contains(peleador2));
-                //Si ambos pasaron el control, los agrego a la Lista de indices
-                indices.Add(peleador1);
-                indices.Add(peleador2);
-            }
-
-//Muestra de los pares de jugadores a pelear
-int k = 0;
-while(k<n)
+                                    //Generador de 2 indices aleatorios
+                                    //El par de indices debe generarse n/2 veces
+for (int i = 0; i < n / 2; i++)
 {
-    Console.WriteLine("Proxima batalla: " + indices[k] + " Vs. " + indices[k+1]);
-    k+=2;
+    do
+    {
+        peleador1 = rnd.Next(0, n);
+        peleador2 = rnd.Next(0, n); ;//n estaba definida antes como la cantidad de personajes a generar
+    } while (peleador1 == peleador2 || indices.Contains(peleador1) || indices.Contains(peleador2));
+    //Si ambos pasaron el control, los agrego a la Lista de indices
+    indices.Add(peleador1);
+    indices.Add(peleador2);
 }
+
 
 //Los contrincantes estan definidos
 //Ahora se debe iniciar las batallas
@@ -88,50 +81,33 @@ while(k<n)
 //Se van a modificar sus valores de combate de forma temporal durante su turno de 3 ataques.
 //Guardo los valores originales en variables auxiliares lo que dure el turno
 
-for (int index=0; index < characters.Count(); index+=2)
-{
-    //Indices para ambos peleadores
-    //int index = 0;
-    int atacante = indices[index];
-    int contrincante = indices[index + 1];
-    /*//Guardo el default de los valores de cada luchador
-    
-    
-    
-    int EfectividadDisparoAux2 = combat[contrincante].ED;
-    double ValorDeAtaqueAux2 = combat[contrincante].VA;
-    double DanioDefault2 = combat[contrincante].DanioProvocado(combat[j]);*/
-    /*
-    //Muestra si se hicieron los cambios, solo DEBUG
-        Console.WriteLine("Primera batalla:");
-        Console.WriteLine("Atributos aleatorios del personaje " + atacante);
-        Console.WriteLine("Nivel:" + characters[atacante].nivel);
-        Console.WriteLine("Salud(100):" + caracteristicas[atacante].salud);
-        Console.WriteLine("Tipo:" + caracteristicas[atacante].tipo);
-        Console.WriteLine("Atributos de combate del personaatacantee:");
-        Console.WriteLine("Poder de Disparo: " + combat[atacante].PD);
-        Console.WriteLine("Efectividad de Disparo: " + combat[atacante].ED);
-        Console.WriteLine("Valor de Ataque: " + combat[atacante].VA);
-        Console.WriteLine("Danio provocado: " + combat[atacante].DanioProvocado(combat[contrincante]));*/
+//Split es un denominador que partirá en 2 la partida en cada ciclo
+//int split = 1;
+//for (int i = 0; i < characters.Count(); i++)
+//{
+    int tamanioLista = characters.Count();
 
-
-
-    //Console.WriteLine("==Resultados de salud==");
-    //Console.WriteLine("Salud atacante:" + caracteristicas[atacante].salud);
-    //Console.WriteLine("Salud contrincante:" + caracteristicas[contrincante].salud);
-    //Muestro al Ganador:
-    while (characters.Count() > 1)
+    for (int index = 0; index < tamanioLista; index += 2)
     {
-        do
-        {
-            ResoluciondelCombate(characters, caracteristicas, combat, indices, atacante, contrincante, index);
+        //Indices para ambos peleadores
+        int atacante = indices[index];
+        int contrincante = indices[index + 1];
+    
+        MostarPeleadores(tamanioLista, indices, index);
 
-        } while (caracteristicas[atacante].salud == caracteristicas[contrincante].salud);
+        ResoluciondelCombate(characters, caracteristicas, combat, indices, atacante, contrincante, index);
+
+        EscribirCSV(characters, caracteristicas);
+        //split *= 2;
+        
     }
-
-    EscribirCSV(characters, caracteristicas);
-
+    //BorrarPerdedores(characters, caracteristicas, combat, indices);
+//}
+if (characters.Count() == 1)
+{
+    Console.WriteLine("El ganador del trono de hierro es: " + indices[0]);
 }
+MostrarCSV();
 
 static void Ataque1(List<Character> characters, List<Combate> combat, int atacante)
 {
@@ -224,7 +200,7 @@ static void Duelo(List<Character> characters, List<Caracteristicas> caracteristi
     ActualizarSaludContrincante(caracteristicas, combat, contrincante, atacante);
 }
 
-static void ResoluciondelCombate(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat,  List<int> indices,int atacante, int contrincante, int indexcombates)
+static void ResoluciondelCombate(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, List<int> indices, int atacante, int contrincante, int indexcombates)
 {
     Duelo(characters, caracteristicas, combat, atacante, contrincante);
     Console.Write("El Ganador del encuentro es:\t");
@@ -235,12 +211,7 @@ static void ResoluciondelCombate(List<Character> characters, List<Caracteristica
         caracteristicas[atacante].salud += 10;//Se otorga 10 puntos de vida al ganador
         characters[atacante].armadura -= 1;//Pierde 1 punto de armadura
         characters[atacante].destreza += 2;//Se otorgan 2 puntos de destreza
-        //Elimino de las listas al perdedor
-        /*characters.Remove(characters[contrincante]);
-        caracteristicas.Remove(caracteristicas[contrincante]);
-        combat.Remove(combat[contrincante]);
-        indices.Remove(indices[indexcombates+1]);*/
-
+        characters[atacante].ganador = true;
     }
     else if (caracteristicas[atacante].salud < caracteristicas[contrincante].salud)
     {
@@ -248,11 +219,7 @@ static void ResoluciondelCombate(List<Character> characters, List<Caracteristica
         caracteristicas[contrincante].salud += 10;//Se otorga 10 puntos de vida al ganador
         characters[contrincante].armadura -= 1;//Pierde 1 punto de armadura
         characters[contrincante].destreza += 2;//Se otorgan 2 puntos de destreza
-        //Elimino de las listas al perdedor
-        /*characters.Remove(characters[atacante]);
-        caracteristicas.Remove(caracteristicas[atacante]);
-        combat.Remove(combat[atacante]);
-        indices.Remove(indices[indexcombates]);*/
+        characters[contrincante].ganador = true;
     }
     else
     {
@@ -260,17 +227,123 @@ static void ResoluciondelCombate(List<Character> characters, List<Caracteristica
     }
 }
 
-static void EscribirCSV(List<Character> characters, List<Caracteristicas> caracteristicas)
+static void BorrarPerdedores(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, List<int> indices)
 {
-    StreamWriter sw = new StreamWriter("ganadores.csv");
 
-    if (!File.Exists("ganadores.csv"))
+    for (int i = 0; i < characters.Count(); i++)
     {
-        sw.WriteLine("Nombre;Apodo;Nivel;Tipo");
+        int atacante = indices[i];
+        //int contrincante = indices[i + 1];
+
+        if (characters[atacante].ganador == false)
+        {
+            //Elimino de las listas al perdedor
+            characters.Remove(characters[atacante]);
+            caracteristicas.Remove(caracteristicas[atacante]);
+            combat.Remove(combat[atacante]);
+            indices.Remove(indices[i]);
+        }
+        /*else if (characters[contrincante].ganador)
+        {
+            //Elimino de las listas al perdedor
+            characters.Remove(characters[atacante]);
+            caracteristicas.Remove(caracteristicas[atacante]);
+            combat.Remove(combat[atacante]);
+            indices.Remove(indices[i]);
+        }*/
+    }
+}
+
+static void SiguienteRonda(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, List<int> indices)
+{
+    foreach (var item in indices)
+    {
+        if (characters[item].ganador)
+        {
+
+        }
+    }
+}
+
+static void EscribirCSV(List<Character> characters, List<Caracteristicas> caracteristicas)
+    {
+        StreamWriter sw = new StreamWriter(@"C:\Users\Juan Ignacio Carrizo\Desktop\Ganadores.csv");
+
+        if (!File.Exists(@"C:\Users\Juan Ignacio Carrizo\Desktop\Ganadores.csv"))
+        {
+            sw.WriteLine("Nombre;Apodo;Nivel;Tipo");
+        }
+        else
+        {
+                sw.WriteLine(caracteristicas[0].nombre + ";" + caracteristicas[0].apodo + ";" + characters[0].nivel + ";" + caracteristicas[0].tipo + ";");
+        }
+        sw.Close();
+    }
+
+static void MostrarCSV() {
+
+    if (File.Exists(@"C:\Users\Juan Ignacio Carrizo\Desktop\Ganadores.csv"))
+    {
+        Console.WriteLine("Nombre\t\tApodo\t\tNivel\t\tTipo\t\t");
+        string line = "";
+        using (StreamReader sr = new StreamReader(@"C:\Users\Juan Ignacio Carrizo\Desktop\Ganadores.csv"))
+        {
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] substring = line.Split(';');
+
+                foreach (var sub in substring)
+                {
+                    Console.Write($"{sub}\t\t");
+                }
+            }
+        }
     }
     else
     {
-        sw.WriteLine(caracteristicas[0].nombre + ";" + caracteristicas[0].apodo + ";" + characters[0].nivel + ";" + caracteristicas[0].tipo + ";");
+        Console.WriteLine("No existe registro de ganadores anteriores");
     }
-    sw.Close();
 }
+
+static void GuardarJson(List<Character> characters, List<Caracteristicas> caracteristicas)
+{
+    string participantesJson = JsonSerializer.Serialize(caracteristicas);
+    using (var archivo = new FileStream("participantes.json", FileMode.Create))
+    {
+        using (var strWriter = new StreamWriter(archivo))
+        {
+            strWriter.WriteLine("{0}", participantesJson);
+            strWriter.Close();
+        }
+    }
+}
+
+static void AbrirJson(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, List<int> indices)
+{
+    string documento;
+    using (var archivoOpen = new FileStream("participantes.json", FileMode.Open))
+    {
+        using (var strReader = new StreamReader(archivoOpen))
+        {
+            documento = strReader.ReadToEnd();
+            archivoOpen.Close();
+        }
+    }
+    var leidoDesdeJson = JsonSerializer.Deserialize<List<Caracteristicas>>(documento);
+}
+
+static void MostarPeleadores(int n, List<int> indices, int k = 0, string condicion = "NULL")
+    {
+        //Muestra de los pares de jugadores a pelear
+        //int k = 0;
+        if (condicion == "showall")
+        {
+            while (k < n)
+            {
+                Console.WriteLine("Proxima batalla: " + indices[k] + " Vs. " + indices[k + 1]);
+                k += 2;
+            }
+        }
+        else
+            Console.WriteLine("Proxima batalla: " + indices[k] + " Vs. " + indices[k + 1]);
+    }

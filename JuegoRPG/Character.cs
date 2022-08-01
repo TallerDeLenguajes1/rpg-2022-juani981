@@ -11,6 +11,7 @@ public class Character
 		fuerza = random.Next(1, 11);
 		nivel = random.Next(1, 11);
 		armadura = random.Next(1, 11);
+		ganador = false;
 	}
 	//Declaracion de variables
 	public int velocidad {get;set;}
@@ -18,5 +19,6 @@ public class Character
 	public int fuerza {get; set;}
 	public int nivel {get; set;}
 	public int armadura {get; set;}
+	public bool ganador { get; set; }
 
 }
