@@ -1,13 +1,17 @@
 ﻿using System;
-
+using JuegoRPG;
+using System.Text.Json;
+using System.Net;
 public class Caracteristicas
 {
 	public Caracteristicas()
 	{
 		Random random = new Random();
-		edad = random.Next(0, 301);
+		//edad = random.Next(0, 301);
 		salud = 100;
 		tipo = Tipoaleatorio();
+		fechaNac = GenerarFechaAleatoria();
+		edad = CalcularEdad(fechaNac);
 	}
 	public string tipo { get; set; }
 	public string? nombre { get; set; }
@@ -26,4 +30,18 @@ public class Caracteristicas
     {
 		return nombre+";"+apodo+";"+ganador.nivel+";"+tipo;
     }
+	public DateTime GenerarFechaAleatoria()
+	{
+		DateTime dtmFechaInicial = new DateTime(1723, 1, 1);//Para que tenga maximo 300 anios
+		Random aleatorio = new Random();
+		int rangoDias = (DateTime.Today - dtmFechaInicial).Days;
+		DateTime dtmFechaAleatoria = dtmFechaInicial.AddDays(aleatorio.Next(rangoDias));
+		return (dtmFechaAleatoria);
+	}
+	public int CalcularEdad(DateTime a)
+    {
+		var b = DateTime.Today;
+		var edad = b.Year - a.Year;
+		return edad;
+	}
 }
