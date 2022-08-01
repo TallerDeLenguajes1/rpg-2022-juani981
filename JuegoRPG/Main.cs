@@ -53,6 +53,7 @@ switch (opcion_menu)
         Ronda1(characters, caracteristicas, combat, indices);
 
         RondaSiguiente(characters, caracteristicas, combat, n, indices);
+
         break;
 
 
@@ -423,7 +424,7 @@ static void AbrirJson(List<Character> characters, List<Caracteristicas> caracter
     var leidoDesdeJson = JsonSerializer.Deserialize<List<Caracteristicas>>(documento);
 }
 
-static void MostarPeleadores(List<int> indices, int k = 0, string condicion = "NULL")
+static void MostarPeleadores(List<Caracteristicas> caracteristicas, List<int> indices, int k = 0, string condicion = "NULL")
 {
     //Muestra de los pares de jugadores a pelear
     //int k = 0;
@@ -432,12 +433,12 @@ static void MostarPeleadores(List<int> indices, int k = 0, string condicion = "N
     {
         while (k < n)
         {
-            Console.WriteLine("Proxima batalla: " + indices[k] + " Vs. " + indices[k + 1]);
+            Console.WriteLine("Proxima batalla: " + caracteristicas[indices[k]].apodo + " Vs. " + caracteristicas[indices[k+1]].apodo);
             k += 2;
         }
     }
     else
-        Console.WriteLine("Proxima batalla: " + indices[k] + " Vs. " + indices[k + 1]);
+        Console.WriteLine("Proxima batalla: " + caracteristicas[indices[k]].apodo + " Vs. " + caracteristicas[indices[k+1]].apodo);
 }
 
 static void Ronda1(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, List<int> indices)
@@ -448,16 +449,13 @@ static void Ronda1(List<Character> characters, List<Caracteristicas> caracterist
         int atacante = indices[index];
         int contrincante = indices[index + 1];
 
-        MostarPeleadores(indices, index);
+        MostarPeleadores(caracteristicas,indices, index);
 
 
         ResoluciondelCombate(characters, caracteristicas, combat, indices, atacante, contrincante, index);
-
-
-
-        //split *= 2;
-
+       
     }
+    //Console.WriteLine("====Siguiente Ronda====");
 }
 
 static void RondaSiguiente(List<Character> characters, List<Caracteristicas> caracteristicas, List<Combate> combat, int n, List<int> indices)
@@ -469,20 +467,21 @@ static void RondaSiguiente(List<Character> characters, List<Caracteristicas> car
     {
         List<int> aux = ListaAuxGanadores(characters, indices);
         Ronda1(characters, caracteristicas, combat, aux);
-        m /= 2;
+
+       m /= 2;
         if (m == 2)
         {
 
             if (caracteristicas[aux[0]].salud > caracteristicas[aux[1]].salud)
             {
-                Console.WriteLine("El ganador del trono de hierro es: " + aux[0]);
+                Console.WriteLine("\n\n=El ganador del trono de hierro es: " + caracteristicas[aux[1]].apodo);
                 indexGanador = 0;
                 EscribirCSV(characters, caracteristicas, indexGanador);
             }
             else
             if (caracteristicas[aux[0]].salud < caracteristicas[aux[1]].salud)
             {
-                Console.WriteLine("El ganador del trono de hierro es: " + aux[1]);
+                Console.WriteLine("\n\n=El ganador del trono de hierro es: " + caracteristicas[aux[1]].nombre);
                 indexGanador = 1;
                 EscribirCSV(characters, caracteristicas, indexGanador);
             }
