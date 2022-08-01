@@ -122,8 +122,6 @@ static void MostrarPersonajesCreados(List<Character> characters, List<Caracteris
 {
     for (int i = 0; i < characters.Count(); i++)
     {
-        Console.WriteLine("Prueba de generacion de personajes:");
-        Console.WriteLine("Atributos aleatorios del personaje " + i + ":");
         Console.WriteLine("Nombre:" + caracteristicas[i].nombre);
         Console.WriteLine("Apodo:" + caracteristicas[i].apodo);
         Console.WriteLine("Velocidad:" + characters[i].velocidad);
@@ -314,6 +312,7 @@ static void ResoluciondelCombate(List<Character> characters, List<Caracteristica
         characters[atacante].armadura -= 1;//Pierde 1 punto de armadura
         characters[atacante].destreza += 2;//Se otorgan 2 puntos de destreza
         characters[atacante].ganador = true;
+
     }
     else if (caracteristicas[atacante].salud < caracteristicas[contrincante].salud)
     {
@@ -469,12 +468,12 @@ static void RondaSiguiente(List<Character> characters, List<Caracteristicas> car
         Ronda1(characters, caracteristicas, combat, aux);
 
        m /= 2;
-        if (m == 2)
+        if (m == 1)
         {
 
             if (caracteristicas[aux[0]].salud > caracteristicas[aux[1]].salud)
             {
-                Console.WriteLine("\n\n=El ganador del trono de hierro es: " + caracteristicas[aux[1]].apodo);
+                Console.WriteLine("\n\n=El ganador del trono de hierro es: " + caracteristicas[aux[1]].nombre);
                 indexGanador = aux[0];
                 EscribirCSV(characters, caracteristicas, indexGanador);
             }
@@ -487,6 +486,6 @@ static void RondaSiguiente(List<Character> characters, List<Caracteristicas> car
             }
 
         }
-    } while (m > 2);
+    } while (m > 1);
 }
 

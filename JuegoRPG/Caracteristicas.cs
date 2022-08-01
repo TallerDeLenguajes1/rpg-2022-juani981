@@ -26,10 +26,7 @@ public class Caracteristicas
 		string[] tipos = { "Bufón", "Paladin", "Bárbaro", "Erudito" };
 		return tipos[random.Next(0, 4)];
 	}
-	public string DevolverGanadorCSV(Character ganador)
-    {
-		return nombre+";"+apodo+";"+ganador.nivel+";"+tipo;
-    }
+	
 	public DateTime GenerarFechaAleatoria()
 	{
 		DateTime dtmFechaInicial = new DateTime(1723, 1, 1);//Para que tenga maximo 300 anios
